@@ -29,7 +29,7 @@ def main(inpt):
         exit()
     json = {"userMessageText":inpt}
     if CV_HNDLR:
-        json.update({"conversationId":CV_HNDLR["_"]})
+        json["conversationId"] = CV_HNDLR["_"]
     _ = requests.post("https://services.bingapis.com/sydney/chat", json=json).json()
     if not _.get("messages") and "has expired." in _["result"]["message"]:
         del CV_HNDLR["_"]
