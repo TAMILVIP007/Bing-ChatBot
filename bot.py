@@ -27,7 +27,7 @@ client.start(bot_token=BOT_TOKEN)
 
 API_URL = "https://services.bingapis.com/sydney/chat"
 
-HI_STRINGS = ["hi", "hello", "hey"]
+HI_STRINGS = ["Merhaba", "Selam", "hey"]
 
 CONVERSATION_HANDLER = {}
 SELF = client.loop.run_until_complete(client.get_me())
