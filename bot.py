@@ -27,7 +27,7 @@ client.start(bot_token=BOT_TOKEN)
 
 API_URL = "https://services.bingapis.com/sydney/chat"
 
-HI_STRINGS = ["hi", "hello", "hey"]
+HI_STRINGS = ["Merhaba", "Selam", "hey"]
 
 CONVERSATION_HANDLER = {}
 SELF = client.loop.run_until_complete(client.get_me())
@@ -36,9 +36,7 @@ SELF = client.loop.run_until_complete(client.get_me())
 @client.on(NewMessage(func= lambda x: x.text or x.sticker))
 async def message_handler(event : Message):
     if not event.is_private:
-        reply = None
-        if event.is_reply:
-            reply = await event.get_reply_message()
+        reply = await event.get_reply_message() if event.is_reply else None
         if not (event.mentioned or (reply and reply.sender_id == SELF.id)):
             return
     chat = event.chat_id
@@ -53,9 +51,8 @@ async def message_handler(event : Message):
     else:
         msg = event.text
     json = {"userMessageText":msg}
-    c_id = CONVERSATION_HANDLER.get(chat)
-    if c_id:
-        json.update({"conversationId": c_id})
+    if c_id := CONVERSATION_HANDLER.get(chat):
+        json["conversationId"] = c_id
 
     async with aiohttp.ClientSession() as ses:
         async with ses.post(API_URL, json=json) as res:
